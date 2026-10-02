@@ -1,0 +1,8 @@
+# pnpm-workspace.yaml
+packages:
+  - 'backend'
+  - 'app'
+  - 'landing'
+allowBuilds:
+  '@scarf/scarf': false
+  esbuild: false
