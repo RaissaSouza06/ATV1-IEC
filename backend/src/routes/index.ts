@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import userRoutes from './userRoutes';
+import tarefaRoutes from './tarefaRoutes';
 
 const router = Router();
 
-// Registra as rotas de usuarios sob o prefixo /users
-router.use('/users', userRoutes);
+// Registo das rotas da entidade principal (Tarefas)
+router.use('/tarefas', tarefaRoutes);
 
 export default router;
