@@ -41,5 +41,5 @@ Tarefa.init(
     sequelize,
     tableName: 'tarefas',
     timestamps: true,
-  }
+  },
 );

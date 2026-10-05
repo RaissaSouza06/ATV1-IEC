@@ -32,7 +32,9 @@ async function main() {
 
     app.listen(PORT, () => {
       console.log(`Servidor rodando em http://localhost:${PORT}`);
-      console.log(`Documentação do Swagger disponível em http://localhost:${PORT}/api/docs`);
+      console.log(
+        `Documentação do Swagger disponível em http://localhost:${PORT}/api/docs`,
+      );
     });
   } catch (error) {
     console.error('Erro ao conectar com o banco de dados:', error);

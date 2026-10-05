@@ -1,0 +1,70 @@
+name: Tarefas API CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  tarefas-backend-pipeline:
+    name: Qualidade, Tipos e Build - Tarefas API
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do Repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar o pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: Configurar o Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'pnpm'
+          cache-dependency-path: 'backend/pnpm-lock.yaml'
+
+      - name: Instalar Dependências do Backend
+        run: |
+          cd backend
+          pnpm install --frozen-lockfile
+
+      - name: Executar Linting (ESLint)
+        run: |
+          cd backend
+          pnpm run lint
+
+      - name: Verificar Formatação (Prettier)
+        run: |
+          cd backend
+          pnpm run format:check
+
+      - name: Checagem de Tipos (TypeScript)
+        run: |
+          cd backend
+          pnpm run type-check
+
+      - name: Compilar Aplicação para Produção
+        run: |
+          cd backend
+          pnpm run build
+
+      - name: Validar Build da Imagem Docker
+        run: |
+          docker build -t api-tarefas:latest ./backend
+
+      - name: Validar Frontend Opcional (se presente)
+        if: hashFiles('app/package.json') != ''
+        run: |
+          echo "Interface frontend detetada. A compilar..."
+          cd app
+          pnpm install --frozen-lockfile
+          pnpm run build
