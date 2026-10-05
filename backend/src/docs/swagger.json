@@ -1,139 +1,241 @@
 {
-  "openapi": "3.0.0",
-  "info": {
-    "title": "LDW Backend API - Tarefas",
-    "version": "1.0.0",
-    "description": "Documentacao interativa da API REST para integracao com o Front-end React"
-  },
-  "servers": [
-    {
-      "url": "http://localhost:3000/api",
-      "description": "Servidor Local de Desenvolvimento"
-    }
-  ],
-  "paths": {
-    "/tarefas": {
-      "get": {
-        "summary": "Listar todas as tarefas",
-        "tags": ["Tarefas"],
-        "responses": {
-          "200": {
-            "description": "Lista de tarefas retornada com sucesso"
-          }
-        }
-      },
-      "post": {
-        "summary": "Cadastrar nova tarefa",
-        "tags": ["Tarefas"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateTarefaDTO"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": { "description": "Tarefa criada com sucesso" },
-          "400": { "description": "Dados invalidos ou campos ausentes" }
-        }
-      }
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API de Gestão de Tarefas",
+        "version": "1.0.0",
+        "description": "Documentação interativa da API REST para integração com a aplicação de gestão de tarefas."
     },
-    "/tarefas/{id}": {
-      "get": {
-        "summary": "Buscar tarefa por ID",
-        "tags": ["Tarefas"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "integer" }
-          }
-        ],
-        "responses": {
-          "200": { "description": "Tarefa encontrada" },
-          "404": { "description": "Tarefa nao encontrada" }
+    "servers": [
+        {
+            "url": "http://localhost:3000/api",
+            "description": "Servidor Local de Desenvolvimento"
         }
-      },
-      "put": {
-        "summary": "Atualizar dados de uma tarefa",
-        "tags": ["Tarefas"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "integer" }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateTarefaDTO"
-              }
+    ],
+    "paths": {
+        "/tarefas": {
+            "get": {
+                "summary": "Listar todas as Tarefas",
+                "tags": [
+                    "Tarefas"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de tarefas retornada com sucesso"
+                    },
+                    "500": {
+                        "description": "Erro interno no servidor ao listar as tarefas"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Cadastrar Nova Tarefa",
+                "tags": [
+                    "Tarefas"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateTarefaDTO"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Tarefa criada com sucesso"
+                    },
+                    "400": {
+                        "description": "O campo titulo é obrigatório"
+                    },
+                    "409": {
+                        "description": "Ja existe uma Tarefa cadastrada com este titulo."
+                    },
+                    "500": {
+                        "description": "Erro ao cadastrar a Tarefa"
+                    }
+                }
             }
-          }
         },
-        "responses": {
-          "200": { "description": "Tarefa atualizada com sucesso" },
-          "404": { "description": "Tarefa nao encontrada" }
+        "/tarefas/{id}": {
+            "get": {
+                "summary": "Listar uma Tarefa por ID",
+                "tags": [
+                    "Tarefas"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Tarefa encontrada com sucesso"
+                    },
+                    "400": {
+                        "description": "O ID informado deve ser um numero valido."
+                    },
+                    "404": {
+                        "description": "Tarefa não encontrada!"
+                    },
+                    "500": {
+                        "description": "Erro ao listar a Tarefa!"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Atualizar uma Tarefa existente",
+                "tags": [
+                    "Tarefas"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateTarefaDTO"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Tarefa atualizada com sucesso"
+                    },
+                    "400": {
+                        "description": "ID inválido ou erro de validação nos campos (título, etiqueta, prioridade ou status_conclusao)"
+                    },
+                    "404": {
+                        "description": "Tarefa não encontrada para atualização!"
+                    },
+                    "409": {
+                        "description": "Ja existe uma Tarefa cadastrada com este titulo."
+                    },
+                    "500": {
+                        "description": "Erro ao atualizar a Tarefa"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Remover uma Tarefa",
+                "tags": [
+                    "Tarefas"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Tarefa removida com sucesso"
+                    },
+                    "400": {
+                        "description": "O ID informado deve ser um numero valido."
+                    },
+                    "404": {
+                        "description": "Tarefa não encontrada para exclusão."
+                    },
+                    "500": {
+                        "description": "Erro ao excluir Tarefa."
+                    }
+                }
+            }
         }
-      },
-      "delete": {
-        "summary": "Remover tarefa por ID",
-        "tags": ["Tarefas"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "integer" }
-          }
-        ],
-        "responses": {
-          "204": { "description": "Tarefa removida com sucesso" },
-          "404": { "description": "Tarefa nao encontrada" }
+    },
+    "components": {
+        "schemas": {
+            "Tarefa": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "titulo": {
+                        "type": "string",
+                        "example": "Estudar TypeScript"
+                    },
+                    "etiqueta": {
+                        "type": "string",
+                        "example": "Estudos"
+                    },
+                    "prioridade": {
+                        "type": "string",
+                        "example": "Alta"
+                    },
+                    "status_conclusao": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "example": "2026-10-05T10:00:00.000Z"
+                    }
+                }
+            },
+            "CreateTarefaDTO": {
+                "type": "object",
+                "required": [
+                    "titulo"
+                ],
+                "properties": {
+                    "titulo": {
+                        "type": "string",
+                        "example": "Estudar TypeScript"
+                    },
+                    "etiqueta": {
+                        "type": "string",
+                        "example": "Estudos"
+                    },
+                    "prioridade": {
+                        "type": "string",
+                        "example": "Alta"
+                    }
+                }
+            },
+            "UpdateTarefaDTO": {
+                "type": "object",
+                "properties": {
+                    "titulo": {
+                        "type": "string",
+                        "example": "Estudar TypeScript Avançado"
+                    },
+                    "etiqueta": {
+                        "type": "string",
+                        "example": "Programação"
+                    },
+                    "prioridade": {
+                        "type": "string",
+                        "example": "Média"
+                    },
+                    "status_conclusao": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                }
+            }
         }
-      }
     }
-  },
-  "components": {
-    "schemas": {
-      "Tarefa": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "integer", "example": 1 },
-          "titulo": { "type": "string", "example": "Estudar Docker e Sequelize" },
-          "etiqueta": { "type": "string", "example": "Backend" },
-          "prioridade": { "type": "string", "example": "Alta" },
-          "status_conclusao": { "type": "boolean", "example": false },
-          "createdAt": { "type": "string", "example": "2026-10-05T10:00:00.000Z" }
-        }
-      },
-      "CreateTarefaDTO": {
-        "type": "object",
-        "required": ["titulo"],
-        "properties": {
-          "titulo": { "type": "string", "example": "Estudar Docker e Sequelize" },
-          "etiqueta": { "type": "string", "example": "Backend" },
-          "prioridade": { "type": "string", "example": "Alta" },
-          "status_conclusao": { "type": "boolean", "example": false }
-        }
-      },
-      "UpdateTarefaDTO": {
-        "type": "object",
-        "properties": {
-          "titulo": { "type": "string", "example": "Estudar Docker, Sequelize e Swagger" },
-          "etiqueta": { "type": "string", "example": "Fullstack" },
-          "prioridade": { "type": "string", "example": "Urgente" },
-          "status_conclusao": { "type": "boolean", "example": true }
-        }
-      }
-    }
-  }
 }
