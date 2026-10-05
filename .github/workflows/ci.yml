@@ -30,12 +30,9 @@ jobs:
         with:
           node-version: 24
           cache: 'pnpm'
-          cache-dependency-path: 'backend/pnpm-lock.yaml'
 
-      - name: Instalar Dependências do Backend
-        run: |
-          cd backend
-          pnpm install --frozen-lockfile
+      - name: Instalar Dependências (Raiz)
+        run: pnpm install --frozen-lockfile
 
       - name: Executar Linting (ESLint)
         run: |
@@ -66,5 +63,4 @@ jobs:
         run: |
           echo "Interface frontend detetada. A compilar..."
           cd app
-          pnpm install --frozen-lockfile
           pnpm run build
