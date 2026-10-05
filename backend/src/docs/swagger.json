@@ -1,0 +1,139 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "LDW Backend API - Tarefas",
+    "version": "1.0.0",
+    "description": "Documentacao interativa da API REST para integracao com o Front-end React"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api",
+      "description": "Servidor Local de Desenvolvimento"
+    }
+  ],
+  "paths": {
+    "/tarefas": {
+      "get": {
+        "summary": "Listar todas as tarefas",
+        "tags": ["Tarefas"],
+        "responses": {
+          "200": {
+            "description": "Lista de tarefas retornada com sucesso"
+          }
+        }
+      },
+      "post": {
+        "summary": "Cadastrar nova tarefa",
+        "tags": ["Tarefas"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTarefaDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Tarefa criada com sucesso" },
+          "400": { "description": "Dados invalidos ou campos ausentes" }
+        }
+      }
+    },
+    "/tarefas/{id}": {
+      "get": {
+        "summary": "Buscar tarefa por ID",
+        "tags": ["Tarefas"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Tarefa encontrada" },
+          "404": { "description": "Tarefa nao encontrada" }
+        }
+      },
+      "put": {
+        "summary": "Atualizar dados de uma tarefa",
+        "tags": ["Tarefas"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTarefaDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Tarefa atualizada com sucesso" },
+          "404": { "description": "Tarefa nao encontrada" }
+        }
+      },
+      "delete": {
+        "summary": "Remover tarefa por ID",
+        "tags": ["Tarefas"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "204": { "description": "Tarefa removida com sucesso" },
+          "404": { "description": "Tarefa nao encontrada" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Tarefa": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "titulo": { "type": "string", "example": "Estudar Docker e Sequelize" },
+          "etiqueta": { "type": "string", "example": "Backend" },
+          "prioridade": { "type": "string", "example": "Alta" },
+          "status_conclusao": { "type": "boolean", "example": false },
+          "createdAt": { "type": "string", "example": "2026-10-05T10:00:00.000Z" }
+        }
+      },
+      "CreateTarefaDTO": {
+        "type": "object",
+        "required": ["titulo"],
+        "properties": {
+          "titulo": { "type": "string", "example": "Estudar Docker e Sequelize" },
+          "etiqueta": { "type": "string", "example": "Backend" },
+          "prioridade": { "type": "string", "example": "Alta" },
+          "status_conclusao": { "type": "boolean", "example": false }
+        }
+      },
+      "UpdateTarefaDTO": {
+        "type": "object",
+        "properties": {
+          "titulo": { "type": "string", "example": "Estudar Docker, Sequelize e Swagger" },
+          "etiqueta": { "type": "string", "example": "Fullstack" },
+          "prioridade": { "type": "string", "example": "Urgente" },
+          "status_conclusao": { "type": "boolean", "example": true }
+        }
+      }
+    }
+  }
+}
