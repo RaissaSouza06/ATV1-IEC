@@ -11,3 +11,6 @@ app
 **/coverage
 docker-compose.yml
 README.md
+**/*.test.ts
+**/*.spec.ts
+**/__tests__
