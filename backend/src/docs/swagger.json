@@ -7,8 +7,8 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000/api",
-      "description": "Servidor Local de Desenvolvimento"
+      "url": "/api",
+      "description": "Servidor Atual (Local ou Render)"
     }
   ],
   "paths": {
