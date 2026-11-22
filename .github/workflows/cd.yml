@@ -1,0 +1,56 @@
+name: CD - Docker e Deploy no Render
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  ci:
+    name: Integracao Continua
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do repositorio
+        uses: actions/checkout@v4
+
+      - name: Instalar pnpm
+        run: npm install -g pnpm@11.28.0
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Instalar dependencias
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Checagem de tipos
+        run: pnpm --filter ./backend type-check
+
+      - name: Build do backend
+        run: pnpm --filter ./backend build
+
+  docker-build:
+    name: Validacao do conteiner
+    runs-on: ubuntu-latest
+    needs: ci
+    steps:
+      - name: Checkout do repositorio
+        uses: actions/checkout@v4
+
+      - name: Build da imagem Docker
+        run: docker build -t meu-backend:${{ github.sha }} .
+
+  deploy:
+    name: Deploy no Render
+    runs-on: ubuntu-latest
+    needs: [ci, docker-build]
+    steps:
+      - name: Disparar Deploy Hook do Render
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}")
+          echo "Status HTTP retornado: $STATUS"
+          if [ "$STATUS" != "200" ] && [ "$STATUS" != "201" ]; then
+            echo "Falha ao disparar o deploy hook"
+            exit 1
+          fi

@@ -19,7 +19,7 @@ app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Rota de verificacao de integridade
 app.get('/api/health', (req: Request, res: Response) => {
-  res.status(200).json({ status: 'OK', mensagem: 'Servidor operacional.' });
+  res.status(200).json({ status: 'ok', uptime: Math.floor(process.uptime()) });
 });
 
 // Registra todas as rotas da aplicacao sob o prefixo /api
