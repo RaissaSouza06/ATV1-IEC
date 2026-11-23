@@ -22,7 +22,7 @@ app.get('/api/health', (req: Request, res: Response) => {
   res.status(200).json({
     status: 'ok',
     uptime: Math.floor(process.uptime()),
-    mensagem: 'API de tarefas online - CD validado',
+    mensagem: 'API de tarefas online - CD validado v2',
   });
 });
 
