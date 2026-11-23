@@ -19,7 +19,11 @@ app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Rota de verificacao de integridade
 app.get('/api/health', (req: Request, res: Response) => {
-  res.status(200).json({ status: 'ok', uptime: Math.floor(process.uptime()) });
+  res.status(200).json({
+    status: 'ok',
+    uptime: Math.floor(process.uptime()),
+    mensagem: 'API de tarefas online - CD validado',
+  });
 });
 
 // Registra todas as rotas da aplicacao sob o prefixo /api
